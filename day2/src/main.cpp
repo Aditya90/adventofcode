@@ -6,8 +6,8 @@ int main(int argc, char **argv)
 {
     if (argc == 2)
     {
-        part1(argv[1]);
-        part2(argv[1]);
+        // part1(argv[1]);
+        // part2(argv[1]);
     }
     else
     {

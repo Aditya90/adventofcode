@@ -1,6 +1,7 @@
 #pragma once
 #include <utility>
 #include <string>
+#include <unordered_set>
 
 /*
 As you walk, the Elf shows you a small bag and some cubes which are either red, green, or blue. Each time you play this game, he will hide a secret number of cubes of each color in the bag, and your goal is to figure out information about the number of cubes.
@@ -24,3 +25,26 @@ In the example above, games 1, 2, and 5 would have been possible if the bag had 
 
 Determine which games would have been possible if the bag had been loaded with only 12 red cubes, 13 green cubes, and 14 blue cubes. What is the sum of the IDs of those games?
 */
+
+struct ColorStruct
+{
+    int redCount{0};
+    int blueCount{0};
+    int greenCount{0};
+    inline bool operator==(const ColorStruct &o) const
+    {
+        if ((this->redCount == o.redCount) && (this->blueCount == o.blueCount) && (this->greenCount == o.greenCount))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+};
+
+using SetOfColorCount = std::unordered_set<ColorStruct>;
+
+ColorStruct
+findNumBlueGreenRed(const std::string &subStrToCheck);

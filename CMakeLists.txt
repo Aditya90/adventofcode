@@ -30,3 +30,4 @@ set(BENCHMARK_FORMAT json)
 
 # Add source sub directory
 add_subdirectory(day1)
+add_subdirectory(day2)
