@@ -44,3 +44,12 @@ TEST(findNumRGB, RgbMixed)
     ColorStruct expectedOutput{.redCount = 20, .blueCount = 6, .greenCount = 59};
     ASSERT_EQ(expectedOutput, findNumBlueGreenRed(" 59 green, 6 blue, 20 red"));
 }
+
+TEST(findNumRGB, GameInputOneLine)
+{
+    std::string testInput = {"Game 3: 8 green, 6 blue, 20 red; 5 blue, 4 red, 13 green; 5 green, 1 red"};
+    ColorStruct expectedOutput{.redCount = 20, .blueCount = 6, .greenCount = 13};
+    ColorStruct actualOutput;
+    getMaxGame(testInput, actualOutput);
+    ASSERT_EQ(expectedOutput, actualOutput);
+}

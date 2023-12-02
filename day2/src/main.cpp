@@ -1,5 +1,5 @@
 #include <iostream>
-#include "day1.h"
+#include "day2.h"
 
 // Pass in file name as input argument
 int main(int argc, char **argv)

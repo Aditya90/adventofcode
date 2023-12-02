@@ -44,7 +44,6 @@ struct ColorStruct
     }
 };
 
-using SetOfColorCount = std::unordered_set<ColorStruct>;
-
 ColorStruct
 findNumBlueGreenRed(const std::string &subStrToCheck);
+void getMaxGame(std::string &gameString, ColorStruct &gameNumberToMaxCubes);

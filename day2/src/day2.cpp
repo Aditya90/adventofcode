@@ -10,6 +10,8 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <string_view>
+#include <sstream>
+#include <vector>
 
 #include "day2.h"
 
@@ -57,7 +59,59 @@ findNumBlueGreenRed(const std::string &subStrToCheck)
     return retValue;
 }
 
-/*
+void getMaxGame(std::string &gameString, ColorStruct &gameNumberToMaxCubes)
+{
+    // std::istringstream inputString{str};
+    // std::string currentWord;
+    // std::string prevWord;
+    // std::size_t gameNum;
+    // while (inputString >> currentWord)
+    //{
+    //    if (currentWord == ":")
+    //    {
+    //        gameNum = stoi(prevWord);
+    //    }
+    // }
+
+    auto posStart = gameString.find(":");
+    auto posEnd = gameString.find(";");
+    std::string subString;
+    size_t count{0};
+
+    cout << "gameString: " << gameString << endl;
+
+    do
+    {
+        cout << count++ << endl;
+        cout << "posStart: " << posStart << ", posEnd: " << posEnd << endl;
+
+        subString = std::string(gameString, posStart, posEnd - posStart);
+        cout << "Rest of String: " << subString << endl;
+        auto gameCount = findNumBlueGreenRed(subString);
+
+        if (gameNumberToMaxCubes.blueCount < gameCount.blueCount)
+        {
+            gameNumberToMaxCubes.blueCount = gameCount.blueCount;
+        }
+        if (gameNumberToMaxCubes.redCount < gameCount.redCount)
+        {
+            gameNumberToMaxCubes.redCount = gameCount.redCount;
+        }
+        if (gameNumberToMaxCubes.greenCount < gameCount.greenCount)
+        {
+            gameNumberToMaxCubes.greenCount = gameCount.greenCount;
+        }
+        posStart = posEnd + 1;
+        posEnd = gameString.find(";", posStart);
+        if (posEnd == std::string::npos)
+        {
+            posEnd = gameString.length();
+        }
+        cout << "posStart: " << posStart << ", posEnd: " << posEnd << endl;
+
+    } while (posEnd > posStart);
+}
+
 void part1(std::string inputFile)
 {
     // Get input string for each line of the file
@@ -65,14 +119,15 @@ void part1(std::string inputFile)
     std::string str;
 
     // Create a map of game number to max number of cubes of each color
-    // std::unordered_map<std::size_t, SetOfColorCount> gameNumberToMaxCubes;
+    std::vector<ColorStruct> gameNumberToMaxCubes;
+    size_t gameNum(1);
 
     while (std::getline(inFile, str))
     {
-        auto pos = str.find("Game ");
+        gameNumberToMaxCubes.emplace_back(ColorStruct{});
+        getMaxGame(str, gameNumberToMaxCubes[gameNum++]);
     }
     // Track the max number of each color which has been recorded so far, with a map of color to max count
 
     //
 }
-*/
