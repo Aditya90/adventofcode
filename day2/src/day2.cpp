@@ -79,11 +79,11 @@ void getMaxGame(std::string &gameString, ColorStruct &gameNumberToMaxCubes)
     size_t count{0};
 
     cout << "gameString: " << gameString << endl;
+    cout << "posStart: " << posStart << ", posEnd: " << posEnd << endl;
 
     do
     {
         cout << count++ << endl;
-        cout << "posStart: " << posStart << ", posEnd: " << posEnd << endl;
 
         subString = std::string(gameString, posStart, posEnd - posStart);
         cout << "Rest of String: " << subString << endl;
@@ -119,15 +119,73 @@ void part1(std::string inputFile)
     std::string str;
 
     // Create a map of game number to max number of cubes of each color
+    cout << "Start Maps" << endl;
+
     std::vector<ColorStruct> gameNumberToMaxCubes;
-    size_t gameNum(1);
+    gameNumberToMaxCubes.reserve(100);
+    size_t gameNum(0);
 
     while (std::getline(inFile, str))
     {
-        gameNumberToMaxCubes.emplace_back(ColorStruct{});
+        // Track the max number of each color which has been recorded so far, with a map of color to max count
+        gameNumberToMaxCubes.emplace_back();
         getMaxGame(str, gameNumberToMaxCubes[gameNum++]);
+        cout << gameNumberToMaxCubes[gameNum - 1];
     }
-    // Track the max number of each color which has been recorded so far, with a map of color to max count
 
-    //
+    // Determine which games would have been possible if the bag had been loaded with only 12 red cubes,
+    // 13 green cubes, and 14 blue cubes. What is the sum of the IDs of those games?
+    cout << "Start Check" << endl;
+    ColorStruct colorCheck = {.redCount = 12, .blueCount = 14, .greenCount = 13};
+    std::size_t gameCountSum{0};
+    std::size_t gameCount{0};
+    for (auto &maxColor : gameNumberToMaxCubes)
+    {
+        gameCount++;
+
+        if ((colorCheck.blueCount >= maxColor.blueCount) &&
+            (colorCheck.redCount >= maxColor.redCount) &&
+            (colorCheck.greenCount >= maxColor.greenCount))
+        {
+            cout << gameCount << endl;
+            gameCountSum += gameCount;
+        }
+    }
+
+    cout << "Game Count: " << gameCountSum << endl;
+}
+
+void part2(std::string inputFile)
+{
+    // Get input string for each line of the file
+    std::ifstream inFile{inputFile};
+    std::string str;
+
+    // Create a map of game number to max number of cubes of each color
+    cout << "Start Maps" << endl;
+
+    std::vector<ColorStruct> gameNumberToMaxCubes;
+    gameNumberToMaxCubes.reserve(100);
+    size_t gameNum(0);
+
+    while (std::getline(inFile, str))
+    {
+        // Track the max number of each color which has been recorded so far, with a map of color to max count
+        gameNumberToMaxCubes.emplace_back();
+        getMaxGame(str, gameNumberToMaxCubes[gameNum++]);
+        cout << gameNumberToMaxCubes[gameNum - 1];
+    }
+
+    // Add the sum of game powers
+    cout << "Start Check" << endl;
+    std::size_t gamePowerSum{0};
+    for (auto &maxColor : gameNumberToMaxCubes)
+    {
+        // Calculate game power
+        size_t gamePower = maxColor.blueCount * maxColor.redCount * maxColor.greenCount;
+
+        gamePowerSum += gamePower;
+    }
+
+    cout << "Game Power Sum: " << gamePowerSum << endl;
 }

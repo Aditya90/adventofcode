@@ -2,6 +2,7 @@
 #include <utility>
 #include <string>
 #include <unordered_set>
+#include <iostream>
 
 /*
 As you walk, the Elf shows you a small bag and some cubes which are either red, green, or blue. Each time you play this game, he will hide a secret number of cubes of each color in the bag, and your goal is to figure out information about the number of cubes.
@@ -42,8 +43,18 @@ struct ColorStruct
             return false;
         }
     }
+
+    friend std::ostream &operator<<(std::ostream &output, const ColorStruct &C)
+    {
+        output << "Red: " << C.redCount
+               << ", Blue: " << C.blueCount
+               << ", Green: " << C.greenCount << std::endl;
+        return output;
+    }
 };
 
 ColorStruct
 findNumBlueGreenRed(const std::string &subStrToCheck);
 void getMaxGame(std::string &gameString, ColorStruct &gameNumberToMaxCubes);
+void part1(std::string inputFile);
+void part2(std::string inputFile);
