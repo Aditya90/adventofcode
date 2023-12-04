@@ -37,8 +37,11 @@ void create2DVectorFromFile(ifstream &infile, std::vector<std::vector<char>> &sc
     }
 }
 
-std::string findDigitsToLeft(const std::vector<std::vector<char>> &schematicMap, size_t rowNum, size_t colNum, bool left)
+std::string findDigitsToLeft(const std::vector<std::vector<char>> &schematicMap, size_t rowNum, size_t colNum, bool left, std::unordered_set<int> &partNumbers)
 {
+    size_t schematicMapRowNum = schematicMap.size();
+    size_t schematicMapColNum = schematicMap[0].size();
+
     std::string retVal;
     if (left && colNum > 0)
     {
@@ -48,10 +51,16 @@ std::string findDigitsToLeft(const std::vector<std::vector<char>> &schematicMap,
         {
 
             char val = schematicMap.at(rowNum).at(leftIndex);
-            if (!isdigit(schematicMap.at(rowNum).at(leftIndex)))
+            if ((val != '0') && (!isdigit(val)))
             {
                 break;
             }
+            if (partNumbers.find(rowNum * schematicMapColNum + leftIndex) != partNumbers.end())
+            {
+                return {};
+            }
+            partNumbers.emplace(rowNum * schematicMapColNum + leftIndex);
+
             leftString << val;
         }
         retVal = leftString.str();
@@ -65,10 +74,16 @@ std::string findDigitsToLeft(const std::vector<std::vector<char>> &schematicMap,
         {
             char val = schematicMap.at(rowNum).at(rightIndex);
 
-            if (!isdigit(schematicMap.at(rowNum).at(rightIndex)))
+            if ((val != '0') && (!isdigit(val)))
             {
                 break;
             }
+            if (partNumbers.find(rowNum * schematicMapColNum + rightIndex) != partNumbers.end())
+            {
+                return {};
+            }
+            partNumbers.emplace(rowNum * schematicMapColNum + rightIndex);
+
             rightString << val;
         }
 
@@ -78,17 +93,17 @@ std::string findDigitsToLeft(const std::vector<std::vector<char>> &schematicMap,
     return retVal;
 }
 
-int getPartNumb(const std::vector<std::vector<char>> &schematicMap, size_t rowNum, size_t colNum)
+int getPartNumb(const std::vector<std::vector<char>> &schematicMap, size_t rowNum, size_t colNum, std::unordered_set<int> &partNumbers)
 {
     size_t schematicMapRowNum = schematicMap.size();
     size_t schematicMapColNum = schematicMap[0].size();
     std::string num;
     std::string digitsToLeft, digitsToRight;
     char charAtPsn = schematicMap.at(rowNum).at(colNum);
-    if (isdigit(charAtPsn))
+    if (isdigit(charAtPsn) || (charAtPsn == '0'))
     {
-        digitsToLeft = findDigitsToLeft(schematicMap, rowNum, colNum, true);
-        digitsToRight = findDigitsToLeft(schematicMap, rowNum, colNum, false);
+        digitsToLeft = findDigitsToLeft(schematicMap, rowNum, colNum, true, partNumbers);
+        digitsToRight = findDigitsToLeft(schematicMap, rowNum, colNum, false, partNumbers);
         num.append(digitsToLeft);
         num.push_back(charAtPsn);
         num.append(digitsToRight);
@@ -106,34 +121,29 @@ int sumAndListAdjacentNums(const std::vector<std::vector<char>> &schematicMap,
     size_t schematicMapRowNum = schematicMap.size();
     size_t schematicMapColNum = schematicMap[0].size();
 
-    std::unordered_set<int> partNumbersTemp;
     int cumSum{0};
-
     for (int i = rowNum - 1; i <= rowNum + 1; i++)
     {
         for (int j = colNum - 1; j <= colNum + 1; j++)
         {
             if ((i != j) && (i >= 0) && (j >= 0) && (i <= schematicMapRowNum - 1) && (j <= schematicMapColNum - 1))
             {
-                int partNum = getPartNumb(schematicMap, i, j);
-                if ((partNum != 0) && (partNumbersTemp.find(partNum) == partNumbersTemp.end()))
+                int partNum = getPartNumb(schematicMap, i, j, partNumbers);
+                if ((partNum != 0) && (partNumbers.find(i * schematicMapColNum + j) == partNumbers.end()))
                 {
-                    partNumbersTemp.insert(partNum);
+                    partNumbers.emplace(i * schematicMapColNum + j);
                     cumSum += partNum;
+                    cout << partNum << ", ";
                 }
             }
         }
     }
 
-    partNumbers.insert(partNumbersTemp.begin(), partNumbersTemp.end());
-
     return cumSum;
 }
-void part1(std::string inputFile)
+
+int calculatePartSumFromSchematicMap(const std::vector<std::vector<char>> &schematicMap)
 {
-    ifstream inFile{inputFile};
-    std::vector<std::vector<char>> schematicMap;
-    create2DVectorFromFile(inFile, schematicMap);
     std::cout << "NumRows: " << schematicMap.size() << ", NumCols: " << schematicMap[0].size() << endl;
 
     // For each entry in the matrix of inputs, check the cells around each symbol
@@ -142,17 +152,27 @@ void part1(std::string inputFile)
     size_t schematicMapColNum = schematicMap[0].size();
     std::unordered_set<int> partNumbers;
     int accumulatedPartNumber{0};
+
     for (size_t rowNum = 0; rowNum < schematicMapRowNum; rowNum++)
     {
         for (size_t colNum = 0; colNum < schematicMapColNum; colNum++)
         {
             char charAtIndex = schematicMap[rowNum][colNum];
-            if (!isalnum(charAtIndex) && !isspace(charAtIndex) && !iscntrl(charAtIndex) && charAtIndex != '.')
+            if (!isalnum(charAtIndex) && !isspace(charAtIndex) && !iscntrl(charAtIndex) && charAtIndex != '.' && charAtIndex != '\r' && charAtIndex != '\n')
             {
                 cout << charAtIndex << endl;
                 accumulatedPartNumber += sumAndListAdjacentNums(schematicMap, rowNum, colNum, partNumbers);
             }
         }
     }
-    std::cout << "Sum of all values: " << accumulatedPartNumber << endl;
+
+    return accumulatedPartNumber;
+}
+void part1(std::string inputFile)
+{
+    ifstream inFile{inputFile};
+    std::vector<std::vector<char>> schematicMap;
+    create2DVectorFromFile(inFile, schematicMap);
+
+    std::cout << "Sum of all values: " << calculatePartSumFromSchematicMap(schematicMap) << endl;
 }
