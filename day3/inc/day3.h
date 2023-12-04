@@ -40,4 +40,4 @@ std::string findDigitsToLeft(const std::vector<std::vector<char>> &schematicMap,
 int getPartNumb(const std::vector<std::vector<char>> &schematicMap, size_t rowNum, size_t colNum);
 
 int sumAndListAdjacentNums(const std::vector<std::vector<char>> &schematicMap,
-                              size_t rowNum, size_t colNum, std::unordered_set<size_t> &partNumbers);
+                           size_t rowNum, size_t colNum, std::unordered_set<int> &partNumbers);

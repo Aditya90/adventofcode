@@ -14,7 +14,7 @@ For building the solution for dayx:
 ```
 mkdir build && cd build
 make -j8 dayx
-./bin/dayx ../dayx/src/day1input.txt
+./bin/dayx ../dayx/src/day3input.txt
 ```
 
 Unit test targets are available separately
