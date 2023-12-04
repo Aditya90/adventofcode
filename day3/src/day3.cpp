@@ -55,11 +55,6 @@ std::string findDigitsToLeft(const std::vector<std::vector<char>> &schematicMap,
             {
                 break;
             }
-            if (partNumbers.find(rowNum * schematicMapColNum + leftIndex) != partNumbers.end())
-            {
-                return {};
-            }
-            partNumbers.emplace(rowNum * schematicMapColNum + leftIndex);
 
             leftString << val;
         }
@@ -78,11 +73,6 @@ std::string findDigitsToLeft(const std::vector<std::vector<char>> &schematicMap,
             {
                 break;
             }
-            if (partNumbers.find(rowNum * schematicMapColNum + rightIndex) != partNumbers.end())
-            {
-                return {};
-            }
-            partNumbers.emplace(rowNum * schematicMapColNum + rightIndex);
 
             rightString << val;
         }
