@@ -73,7 +73,7 @@ std::string findDigitsToLeft(const std::vector<std::vector<char>> &schematicMap,
     return retVal;
 }
 
-size_t getPartNumb(const std::vector<std::vector<char>> &schematicMap, size_t rowNum, size_t colNum)
+int getPartNumb(const std::vector<std::vector<char>> &schematicMap, size_t rowNum, size_t colNum)
 {
     size_t schematicMapRowNum = schematicMap.size();
     size_t schematicMapColNum = schematicMap[0].size();
@@ -88,32 +88,39 @@ size_t getPartNumb(const std::vector<std::vector<char>> &schematicMap, size_t ro
         num.push_back(charAtPsn);
         num.append(digitsToRight);
     }
+    else
+    {
+        num = "0";
+    }
 
     return stoi(num);
 }
-size_t sumAndListAdjacentNums(const std::vector<std::vector<char>> &schematicMap,
-                              size_t rowNum, size_t colNum, std::unordered_set<size_t> &partNumbers)
+int sumAndListAdjacentNums(const std::vector<std::vector<char>> &schematicMap,
+                           size_t rowNum, size_t colNum, std::unordered_set<size_t> &partNumbers)
 {
     size_t schematicMapRowNum = schematicMap.size();
     size_t schematicMapColNum = schematicMap[0].size();
+    int cumSum{0};
 
-    if (rowNum > 0 && colNum > 0)
+    for (int i = rowNum - 1; i <= rowNum + 1; i++)
     {
-        for (int i = rowNum - 1; i <= rowNum + 1; i++)
+        for (int j = colNum - 1; j <= colNum + 1; j++)
         {
-            for (int j = colNum - 1; j <= colNum + 1; j++)
+            if ((i != j) || (i >= 0) || (j >= 0) || (i <= schematicMapRowNum - 1) || (j <= schematicMapColNum - 1))
             {
-                if (i != j)
+                int partNum = getPartNumb(schematicMap, i, j);
+                if ((partNum != 0) && (partNumbers.find(partNum) == partNumbers.end()))
                 {
-                    if (getPartNumb(schematicMap, i, j))
-                    {
-                    }
+                    partNumbers.insert(partNum);
+                    cumSum += partNum;
+                    cout << "Part Num: " << partNum << endl;
                 }
             }
         }
     }
-}
 
+    return cumSum;
+}
 void part1(std::string inputFile)
 {
     ifstream inFile{inputFile};

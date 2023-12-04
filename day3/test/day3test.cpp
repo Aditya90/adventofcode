@@ -2,7 +2,7 @@
 
 #include "day3.h"
 
-TEST(findNumberString, ExampleOne)
+TEST(findNumberString, findDigitsWhenIndexValid)
 {
     std::vector<std::vector<char>> testInput =
         {
@@ -21,8 +21,31 @@ TEST(findNumberString, ExampleOne)
 
      */
     std::string expectedOutputFirst{"467"};
-    std::pair<size_t, int> expectedOutputLast = {15, 2};
 
     ASSERT_EQ(expectedOutputFirst, findDigitsToLeft(testInput, 0, 3, true));
+    // assert(expectedOutputLast == findNumberString(stringToTest, false));
+}
+
+TEST(findNumberString, sumAndListAdjacentNums)
+{
+    std::vector<std::vector<char>> testInput =
+        {
+            {'4', '6', '7', '.', '.', '1', '1', '4', '.', '.'},
+            {'.', '.', '.', '*', '.', '.', '.', '.', '.', '.'},
+            {'.', '.', '3', '5', '.', '.', '6', '3', '3', '.'}};
+    /*
+    ......#...
+    617*......
+    .....+.58.
+    ..592.....
+    ......755.
+    ...$.*....
+    .664.598.. }
+        };
+
+     */
+    int expectedOutputFirst{467 + 35};
+    std::unordered_set<size_t> expectedPartNumbers{"467", "35"};
+    ASSERT_EQ(expectedOutputFirst, sumAndListAdjacentNums(testInput, 1, 3, expectedPartNumbers));
     // assert(expectedOutputLast == findNumberString(stringToTest, false));
 }

@@ -37,7 +37,7 @@ void part2(std::string inputFile);
 
 void create2DVectorFromFile(const std::ifstream &infile, std::vector<std::vector<char>> &schematicMap);
 std::string findDigitsToLeft(const std::vector<std::vector<char>> &schematicMap, size_t rowNum, size_t colNum, bool left = true);
-size_t getPartNumb(const std::vector<std::vector<char>> &schematicMap, size_t rowNum, size_t colNum);
+int getPartNumb(const std::vector<std::vector<char>> &schematicMap, size_t rowNum, size_t colNum);
 
-size_t sumAndListAdjacentNums(const std::vector<std::vector<char>> &schematicMap,
+int sumAndListAdjacentNums(const std::vector<std::vector<char>> &schematicMap,
                               size_t rowNum, size_t colNum, std::unordered_set<size_t> &partNumbers);
