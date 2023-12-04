@@ -45,7 +45,10 @@ TEST(findNumberString, sumAndListAdjacentNums)
 
      */
     int expectedOutputFirst{467 + 35};
-    std::unordered_set<size_t> expectedPartNumbers{"467", "35"};
-    ASSERT_EQ(expectedOutputFirst, sumAndListAdjacentNums(testInput, 1, 3, expectedPartNumbers));
+    std::unordered_set<size_t> expectedPartNumbers{467, 35};
+    std::unordered_set<size_t> returnPartNumbers;
+
+    ASSERT_EQ(expectedOutputFirst, sumAndListAdjacentNums(testInput, 1, 3, returnPartNumbers));
+    ASSERT_EQ(expectedPartNumbers, returnPartNumbers);
     // assert(expectedOutputLast == findNumberString(stringToTest, false));
 }
