@@ -39,7 +39,7 @@ std::string findDigitsToLeft(const std::vector<std::vector<char>> &schematicMap,
     std::string retVal;
     if (left && colNum > 0)
     {
-        size_t leftIndex{colNum - 1};
+        int leftIndex{colNum - 1};
         std::stringstream leftString;
         for (; leftIndex >= 0; leftIndex--)
         {
@@ -51,10 +51,11 @@ std::string findDigitsToLeft(const std::vector<std::vector<char>> &schematicMap,
             leftString << val;
         }
         retVal = leftString.str();
+        reverse(retVal.begin(), retVal.end());
     }
     else if (!left && colNum < schematicMap[0].size())
     {
-        size_t rightIndex{colNum + 1};
+        int rightIndex{colNum + 1};
         std::stringstream rightString;
         for (; rightIndex < schematicMap[0].size(); rightIndex++)
         {
@@ -65,8 +66,10 @@ std::string findDigitsToLeft(const std::vector<std::vector<char>> &schematicMap,
             }
             rightString << val;
         }
+
         retVal = rightString.str();
     }
+
     return retVal;
 }
 
