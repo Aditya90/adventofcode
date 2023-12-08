@@ -22,7 +22,7 @@ def findNumInList(num, list):
     #print ("num: ", num, "list ", list)
     for x in list:
         if num >= x[1] and num < x[1]+x[2]:
-            print (num, " is in ", x, "with a value of", x[0] + (num - x[1]))
+            #print (num, " is in ", x, "with a value of", x[0] + (num - x[1]))
             return x[0] + (num - x[1])
     return num
 
@@ -31,11 +31,12 @@ def findLocation(seedNum, mainlist):
     for listtosearch in range(7):
         seedNum = findNumInList(seedNum, mainlist[listtosearch])
     
+    print ("Location: ", seedNum)
     print("-------------------")
     return seedNum
 
 def part1():
-    testFile = "./day5testinput.txt"
+    testFile = "./day5input.txt"
     f = open(testFile, "r")
     totalSum = 0
     seeds_list= []
