@@ -35,6 +35,7 @@ def findLocation(seedNum, mainlist):
     print("-------------------")
     return seedNum
 
+
 def part1():
     testFile = "./day5input.txt"
     f = open(testFile, "r")
@@ -61,10 +62,68 @@ def part1():
         
         newList.sort(key=lambda x: x[1])
         mainlist.append(newList)
+
     seedLocationList = []
     for seedNum in seeds_list:
         seedLocationList.append(findLocation(seedNum, mainlist))
+
     print ("seedLocationList", seedLocationList)
+    print ("min(seedLocationList)", min(seedLocationList))
+
+def rfindNumInList(num, list):
+    #print ("num: ", num, "list ", list)
+    for x in list:
+        if num >= x[0] and num < x[0]+x[2]:
+            #print (num, " is in ", x, "with a value of", x[0] + (num - x[1]))
+            return x[1] + (num - x[0])
+    return num
+
+
+def findseednum(locationNum, mainlist):
+    print ("Checking for location: ", locationNum)
+    for listtosearch in range(7):
+        locationNum = rfindNumInList(locationNum, mainlist[6-listtosearch])
+    
+    print ("SeedNum: ", locationNum)
+    print("-------------------")
+    return locationNum
+
+def part2():
+    testFile = "./day5testinput.txt"
+    f = open(testFile, "r")
+    totalSum = 0
+    seeds_list= []
+
+    seedsline = f.readline()
+    seeds_list = getSeedListFromLine(seedsline)
+    seedsiter = iter(seeds_list)
+    seeds_list = zip(seediter, seediter)
+    _ = f.readline()
+    # of lists = 7
+    mainlist = []
+    seeds_list.append(seeds_list)
+
+    for x in range(7):
+        newList = []
+
+        # Skip line for name of list
+        _ = f.readline()
+
+        for oneline in f:
+            if oneline.strip() == "":
+                break
+            populateMapWithEntry(oneline, newList)
+        
+        newList.sort(key=lambda x: x[1])
+        mainlist.append(newList)
+
+    seedLocationList = []
+    for locationList in mainlist[7:]:
+        for index in range(seedNumPair[1]):
+            seedLocationList.append(findLocation(seedNum, mainlist))
+
+    print ("seedLocationList", seedLocationList)
+    print ("min(seedLocationList)", min(seedLocationList))
 
 def main():
     part1()
